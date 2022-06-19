@@ -1,13 +1,18 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
+import { FavScreen, HomeScreen } from '../screens';
+
+
 const BottomTab = createBottomTabNavigator();
+
 
 const RootNavigator = () => {
   return (
     <BottomTab.Navigator initialRouteName="screen">
-      <BottomTab.Screen name="AllPets" component={() => <Text>Home</Text>} />
-      <BottomTab.Screen name="SavedPets" component={() => <Text>Home</Text>} />
+      <BottomTab.Group screenOptions={{ headerShown: false }}>
+        <BottomTab.Screen name="Home" component={HomeScreen} />
+        <BottomTab.Screen name="Favorites" component={FavScreen} />
+      </BottomTab.Group>
     </BottomTab.Navigator>
   );
 };

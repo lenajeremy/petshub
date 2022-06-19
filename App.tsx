@@ -2,12 +2,16 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 import RootNavigator from './app/navigation';
+import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
+import petsApi from './app/api/petsApi';
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <ApiProvider api={petsApi}>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </ApiProvider>
   );
 };
 
