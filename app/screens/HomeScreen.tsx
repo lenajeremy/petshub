@@ -1,13 +1,43 @@
 import * as React from 'react';
-import { View, Text, Button, ScrollView, StyleSheet } from 'react-native';
-import { useGetPetsQuery } from '../api/petsApi';
+import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
+import { Pets, useLazyGetPetsQuery } from '../api/petsApi';
+import { Loader, PageHeader, PetCard } from '../components';
 
 function HomeScreen() {
+  // to keep track of all the pets gotten even after scrolling;
+  const [pets, setPets] = React.useState<Pets[]>([]);
+  const [page, setPage] = React.useState(0);
 
-  const { data, isFetching, isError, error } = useGetPetsQuery();
+  const [
+    fetchPets,
+    { isFetching, data: newPets, isError, isLoading },
+  ] = useLazyGetPetsQuery();
 
-  if (isFetching || !data) {
-    return <Text style={{ color: 'black' }}>Loading...</Text>;
+  // fetch pets when the page changes
+  React.useEffect(() => {
+    fetchPets(page);
+  }, [page]);
+
+  // updates the main list of pets whenever a new list comes in
+  React.useEffect(() => {
+    if (newPets) {
+      setPets(pets => (page === 0 ? newPets : [...pets, ...newPets]));
+    }
+  }, [newPets]);
+
+  function refetchPets() {
+    setPage(0);
+  }
+
+  if (isLoading) {
+    return (
+      <Loader
+        style={{ marginTop: 50 }}
+        isLoading={isLoading}
+        isError={isError}
+        error="Something happened"
+      />
+    );
   }
 
   if (isError) {
@@ -19,19 +49,33 @@ function HomeScreen() {
     );
   }
 
+  function _renderPets({ item }: { item: Pets }) {
+    return <PetCard {...item} />;
+  }
+
   return (
-    <ScrollView style = {styles.pageContainer}>
-      <Text style={{ color: 'black' }}>This is the home screen</Text>
-      <Text style={{ color: 'black' }}>{JSON.stringify(data, null, 3)}</Text>
-    </ScrollView>
+    <>
+      <PageHeader title="Dogs I Love" />
+      <FlatList
+        data={pets}
+        // only show the refresh icon when there's a requesting for the first set of pets
+        refreshing={isFetching && page === 0}
+        onRefresh={refetchPets}
+        renderItem={_renderPets}
+        keyExtractor={item => String(item.id)}
+        onEndReached={() => setPage(page => page + 1)}
+        onEndReachedThreshold={0.2}
+        // added to show bottom spacing/padding
+        ListFooterComponent={() => <View style={{ height: 70 }}></View>}
+      />
+      <Loader
+        isError={isError}
+        isLoading={isFetching}
+        error={'Something'}
+        style={{ marginBottom: 20 }}
+      />
+    </>
   );
 }
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-    pageContainer: {
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-    }
-})

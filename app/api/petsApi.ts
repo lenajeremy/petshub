@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { API_KEY, API_URL } from '../utils/constants';
 
-interface Pets {
+export interface Pets {
+    id: number | string;
     name: string;
-    breed: string;
-    isLiked: boolean;
+    isLiked?: boolean;
+    imageUrl: string;
 }
 
 const petsApi = createApi({
@@ -18,12 +19,16 @@ const petsApi = createApi({
     }),
 
     endpoints: builder => ({
-        getPets: builder.query<Pets[], void>({
-            query: () => '/',
-            providesTags: [ 'Pets' ]
+        getPets: builder.query<Pets[], number>({
+            query: (page) => ({
+                // add the page to the url params
+                url: `/?limit=20&page=${page}`,
+            }),
+            providesTags: ['Pets'],
+            transformResponse: (response: any[]) => response.map(pet => ({ id: pet.id, name: pet.name, imageUrl: pet.image.url }))
         }),
     }),
 });
 
 export default petsApi;
-export const { useGetPetsQuery } = petsApi;
+export const { useLazyGetPetsQuery, useGetPetsQuery } = petsApi;
