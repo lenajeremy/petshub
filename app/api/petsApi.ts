@@ -4,7 +4,6 @@ import { API_KEY, API_URL } from '../utils/constants';
 export interface Pets {
     id: number | string;
     name: string;
-    isLiked?: boolean;
     imageUrl: string;
 }
 

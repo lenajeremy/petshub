@@ -1,8 +1,18 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
 import type { Pets } from '../api/petsApi';
+import { HeartFilled, HeartOutlined } from '../assets';
 
 function PetCard(props: Pets) {
+
+  // the default value of false here would be replaced with a boolean
+  // indicating whether or not the pet has been liked
+  const [ isLiked, setIsLiked ] = React.useState(Math.random() < 0.5 ? true : false)
+
+  const likePet = () => {
+    console.log('likeeeeeeiiinnggggg', props.name);
+    setIsLiked(!isLiked)
+  }
 
   return (
     <View style={styles.container}>
@@ -10,6 +20,12 @@ function PetCard(props: Pets) {
         <Image source={{ uri: props.imageUrl }} style={styles.image} />
         <Text style={styles.title}>{props.name}</Text>
       </View>
+      
+      <Pressable onPress = {likePet}>
+        {
+          isLiked ? <HeartFilled fill = '#DE0202' /> : <HeartOutlined />
+        }
+      </Pressable>
     </View>
   );
 }

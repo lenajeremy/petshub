@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Button, FlatList } from 'react-native';
 import { Pets, useLazyGetPetsQuery } from '../api/petsApi';
 import { Loader, PageHeader, PetCard } from '../components';
 
@@ -55,7 +55,7 @@ function HomeScreen() {
 
   return (
     <>
-      <PageHeader title="Dogs I Love" />
+      <PageHeader title="All Dogs" />
       <FlatList
         data={pets}
         // only show the refresh icon when there's a requesting for the first set of pets
