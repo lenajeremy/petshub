@@ -6,9 +6,7 @@ import { useAppDispatch, useAppSelector } from '../redux/store';
 import { likeOrUnlikePets } from '../utils/helpers';
 
 function PetCard(props: Pets) {
-  // the default value of false here would be replaced with a boolean
-  // indicating whether or not the pet has been liked
-
+  
   const likedPets = useAppSelector(store => store.likedPets);
   const dispatch = useAppDispatch();
 

@@ -1,13 +1,17 @@
 import localStore from "./asyncstorage";
 import { useAppDispatch } from "../redux/store";
 import { likePet, dislikePet } from '../redux/store'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-/******* FUNCTIONS FOR LIKING AND UNLIKING PETS **********/
+
+
+/******* FUNCTION FOR LIKING AND UNLIKING PETS **********/
 
 export const likeOrUnlikePets = async (dispatch: ReturnType<typeof useAppDispatch>, petname: string): Promise<boolean> => {
 
-    // we should get a list of names of pets we like
-    const { data } = await localStore.get<string[]>(localStore.FAV_PET_KEY);
+    // get all liked pets from the local storage
+    const { data } = await localStore.get<string[]>(localStore.FAV_PET_KEY, []);
+
     let liked = false;
 
     if (data) {

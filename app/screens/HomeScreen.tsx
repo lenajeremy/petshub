@@ -1,9 +1,13 @@
 import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text, Button, FlatList, StatusBar } from 'react-native';
 import { Pets, useLazyGetPetsQuery } from '../api/petsApi';
 import { Loader, PageHeader, PetCard } from '../components';
 import { updateLikedPets, useAppDispatch } from '../redux/store';
 import localStore from '../utils/asyncstorage';
+
+
+// AsyncStorage.clear()
 
 function HomeScreen() {
   // to keep track of all the pets gotten even after scrolling;
@@ -19,7 +23,9 @@ function HomeScreen() {
 
   const getLikedPetsFromLocalStoreAndUpdateReduxStore = async () => {
 
-    const { data } = await localStore.get<string[]>(localStore.FAV_PET_KEY);
+    const { data } = await localStore.get<string[]>(localStore.FAV_PET_KEY, []);
+
+    console.log(data)
 
     dispatch(updateLikedPets(data as string[]))
   }
@@ -29,7 +35,7 @@ function HomeScreen() {
     getLikedPetsFromLocalStoreAndUpdateReduxStore()
     fetchPets(page);
   }, [page]);
-  
+
 
   // updates the main list of pets whenever a new list comes in
   React.useEffect(() => {
