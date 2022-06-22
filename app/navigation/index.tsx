@@ -7,9 +7,9 @@ const BottomTab = createBottomTabNavigator();
 
 const RootNavigator = () => {
   return (
-    <BottomTab.Navigator initialRouteName="screen">
+    <BottomTab.Navigator initialRouteName="screen" screenOptions={{ tabBarStyle: { elevation: 0, height: 70 }}}>
       <BottomTab.Group
-        screenOptions={{ headerShown: false, tabBarActiveTintColor: '#212227' }}
+        screenOptions={{ headerShown: false, tabBarActiveTintColor: '#212227', tabBarItemStyle: {} }}
       >
         <BottomTab.Screen
           name="Home"

@@ -11,8 +11,7 @@ function PageHeader(props: { title: string }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    paddingHorizontal: 25
+    padding: 25,
   },
   title: {
     color: '#212227',

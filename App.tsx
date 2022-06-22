@@ -2,16 +2,16 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 import RootNavigator from './app/navigation';
-import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
-import petsApi from './app/api/petsApi';
+import { Provider } from 'react-redux';
+import store from './app/redux/store';
 
 const App = () => {
   return (
-    <ApiProvider api={petsApi}>
+    <Provider store={store}>
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
-    </ApiProvider>
+    </Provider>
   );
 };
 

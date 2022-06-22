@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, Text, Button, FlatList } from 'react-native';
+import { View, Text, Button, FlatList, StatusBar } from 'react-native';
 import { Pets, useLazyGetPetsQuery } from '../api/petsApi';
 import { Loader, PageHeader, PetCard } from '../components';
+import { updateLikedPets, useAppDispatch } from '../redux/store';
+import localStore from '../utils/asyncstorage';
 
 function HomeScreen() {
   // to keep track of all the pets gotten even after scrolling;
@@ -13,10 +15,21 @@ function HomeScreen() {
     { isFetching, data: newPets, isError, isLoading },
   ] = useLazyGetPetsQuery();
 
+  const dispatch = useAppDispatch()
+
+  const getLikedPetsFromLocalStoreAndUpdateReduxStore = async () => {
+
+    const { data } = await localStore.get<string[]>(localStore.FAV_PET_KEY);
+
+    dispatch(updateLikedPets(data as string[]))
+  }
+
   // fetch pets when the page changes
   React.useEffect(() => {
+    getLikedPetsFromLocalStoreAndUpdateReduxStore()
     fetchPets(page);
   }, [page]);
+  
 
   // updates the main list of pets whenever a new list comes in
   React.useEffect(() => {
@@ -44,7 +57,7 @@ function HomeScreen() {
     return (
       <View>
         <Text style={{ color: 'black' }}>Error... Please try again</Text>
-        <Button title="Try Again" onPress={() => {}} color="green" />
+        <Button title="Try Again" onPress={() => fetchPets(0)} color="green" />
       </View>
     );
   }
@@ -54,7 +67,8 @@ function HomeScreen() {
   }
 
   return (
-    <>
+    <View style={{ backgroundColor: 'white' }}>
+      <StatusBar backgroundColor={'white'} barStyle="dark-content" />
       <PageHeader title="All Dogs" />
       <FlatList
         data={pets}
@@ -74,7 +88,7 @@ function HomeScreen() {
         error={'Something'}
         style={{ marginBottom: 20 }}
       />
-    </>
+    </View>
   );
 }
 
