@@ -15,10 +15,7 @@ const likedPets = createSlice({
 
         dislikePet(state, action: PayloadAction<Pets>) {
             const index = state.findIndex((pet => pet.name === action.payload.name));
-
-            console.log(index)
             state.splice(index, 1);
-
             return state
         },
 

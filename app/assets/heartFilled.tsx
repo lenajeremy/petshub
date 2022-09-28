@@ -4,8 +4,8 @@ import Svg, { Path } from 'react-native-svg';
 function HeartFilled({ fill }: { fill?: string }) {
   return (
     <Svg
-      width="27"
-      height="26"
+      width="23"
+      height="22"
       viewBox="0 0 27 26"
       fill="none"
     >

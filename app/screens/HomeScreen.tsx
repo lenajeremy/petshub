@@ -1,16 +1,21 @@
 import * as React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text, Button, FlatList, StatusBar } from 'react-native';
+
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  StatusBar,
+  SafeAreaView,
+} from 'react-native';
 import { Pets, useLazyGetPetsQuery } from '../api/petsApi';
 import { Loader, PageHeader, PetCard } from '../components';
 import { updateLikedPets, useAppDispatch } from '../redux/store';
 import localStore from '../utils/asyncstorage';
 
-
 // AsyncStorage.clear()
 
 function HomeScreen() {
-
   // to keep track of all the pets gotten even after scrolling;
   const [pets, setPets] = React.useState<Pets[]>([]);
   const [page, setPage] = React.useState(0);
@@ -20,23 +25,21 @@ function HomeScreen() {
     { isFetching, data: newPets, isError, isLoading },
   ] = useLazyGetPetsQuery();
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const getLikedPetsFromLocalStoreAndUpdateReduxStore = async () => {
-
     const { data } = await localStore.get<Pets[]>(localStore.FAV_PET_KEY, []);
 
-    console.log(data)
+    console.log(data);
 
-    dispatch(updateLikedPets(data as Pets[]))
-  }
+    dispatch(updateLikedPets(data as Pets[]));
+  };
 
   // fetch pets when the page changes
   React.useEffect(() => {
-    getLikedPetsFromLocalStoreAndUpdateReduxStore()
+    getLikedPetsFromLocalStoreAndUpdateReduxStore();
     fetchPets(page);
   }, [page]);
-
 
   // updates the main list of pets whenever a new list comes in
   React.useEffect(() => {
@@ -45,6 +48,7 @@ function HomeScreen() {
     }
   }, [newPets]);
 
+  // get the first list of dogs
   function refetchPets() {
     setPage(0);
   }
@@ -62,10 +66,35 @@ function HomeScreen() {
 
   if (isError) {
     return (
-      <View>
-        <Text style={{ color: 'black' }}>Error... Please try again</Text>
-        <Button title="Try Again" onPress={() => fetchPets(0)} color="green" />
-      </View>
+      <SafeAreaView
+        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Text
+          style={{
+            color: 'black',
+            textAlign: 'center',
+            fontSize: 28,
+            fontWeight: '600',
+          }}
+        >
+          Aw Snap😢!
+        </Text>
+        <Text
+          style={{
+            color: 'gray',
+            textAlign: 'center',
+            fontSize: 18,
+            marginVertical: 5,
+          }}
+        >
+          An Error Occurred.
+        </Text>
+        <Button
+          title="Try Again"
+          onPress={() => fetchPets(0)}
+          color="darkblue"
+        />
+      </SafeAreaView>
     );
   }
 

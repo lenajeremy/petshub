@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../redux/store';
 import { likeOrUnlikePets } from '../utils/helpers';
 
 function PetCard(props: Pets) {
+  
   const likedPets = useAppSelector(store => store.likedPets);
   const dispatch = useAppDispatch();
 
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 10,
     marginRight: 15,
+    backgroundColor: 'gray'
   },
   title: { color: 'black', fontSize: 16 },
 });

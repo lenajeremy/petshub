@@ -8,6 +8,7 @@ import {
   Image,
   StyleSheet,
   Pressable,
+  ListRenderItem,
 } from 'react-native';
 import { Pets } from '../api/petsApi';
 import { HeartFilled } from '../assets';
@@ -16,23 +17,29 @@ import { useAppSelector } from '../redux/store';
 import { likeOrUnlikePets } from '../utils/helpers';
 import { useAppDispatch } from '../redux/store';
 
-const LikedDogCard = React.memo((props: Pets) => {
+interface LikeDogCardProps extends Pets {
+  index: number;
+  totalLength: number;
+}
+
+const LikedDogCard = React.memo((props: LikeDogCardProps) => {
   const dispatch = useAppDispatch();
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'green' }}>
+    <View
+      style={{
+        ...styles.petCard,
+        [props.index % 2 === 0 ? 'paddingRight' : 'paddingLeft']:
+          props.index === props.totalLength - 1 ? 0 : 10,
+      }}
+    >
       <Image source={{ uri: props.imageUrl }} style={styles.petImage} />
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Text>{props.name}</Text>
+      <View style={styles.petCardFooter}>
+        <Text style={{ flex: 1, marginRight: 10, fontSize: 16 }}>
+          {props.name}
+        </Text>
         <Pressable onPress={() => likeOrUnlikePets(dispatch, props)}>
-          <HeartFilled fill="red" />
+          <HeartFilled fill="#DE0202" />
         </Pressable>
       </View>
     </View>
@@ -40,14 +47,22 @@ const LikedDogCard = React.memo((props: Pets) => {
 });
 
 function FavScreen() {
-  const { width, height } = useWindowDimensions();
   const likedPets = useAppSelector(store => store.likedPets);
 
-  const _renderDogCard = React.useCallback(({ item }) => {
-    return (
-      <LikedDogCard name={item.name} imageUrl={item.imageUrl} id={item.id} />
-    );
-  }, []);
+  const _renderDogCard: ListRenderItem<Pets> = React.useCallback(
+    ({ item, index }) => {
+      return (
+        <LikedDogCard
+          name={item.name}
+          imageUrl={item.imageUrl}
+          id={item.id}
+          index={index}
+          totalLength={likedPets.length}
+        />
+      );
+    },
+    [likedPets],
+  );
 
   return (
     <View style={{ backgroundColor: 'white' }}>
@@ -59,6 +74,7 @@ function FavScreen() {
         contentContainerStyle={styles.flatListContainer}
         renderItem={_renderDogCard}
         keyExtractor={item => item.name}
+        ListFooterComponent={() => <View style={{ height: 120 }} />}
       />
     </View>
   );
@@ -68,7 +84,20 @@ export default FavScreen;
 
 const styles = StyleSheet.create({
   flatListContainer: {
-    padding: 24,
+    paddingHorizontal: 24,
+  },
+  petCard: {
+    flex: 1,
+    display: 'flex',
+    paddingVertical: 10,
+  },
+  petCardFooter: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    marginTop: 8,
   },
   petImage: {
     height: 150,
