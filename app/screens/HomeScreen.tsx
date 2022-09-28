@@ -29,9 +29,6 @@ function HomeScreen() {
 
   const getLikedPetsFromLocalStoreAndUpdateReduxStore = async () => {
     const { data } = await localStore.get<Pets[]>(localStore.FAV_PET_KEY, []);
-
-    console.log(data);
-
     dispatch(updateLikedPets(data as Pets[]));
   };
 

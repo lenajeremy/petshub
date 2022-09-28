@@ -65,7 +65,7 @@ function FavScreen() {
   );
 
   return (
-    <View style={{ backgroundColor: 'white' }}>
+    <View style={{ backgroundColor: 'white', flex:1 }}>
       <StatusBar backgroundColor={'white'} barStyle="dark-content" />
       <PageHeader title="Dogs I Like" />
       <FlatList
@@ -74,7 +74,7 @@ function FavScreen() {
         contentContainerStyle={styles.flatListContainer}
         renderItem={_renderDogCard}
         keyExtractor={item => item.name}
-        ListFooterComponent={() => <View style={{ height: 120 }} />}
+        ListFooterComponent={() => <View style={{ height: 20 }} />}
       />
     </View>
   );
