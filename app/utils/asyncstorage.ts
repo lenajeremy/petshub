@@ -6,8 +6,8 @@ const get = async <T>(key: string, defaultData?: T): Promise<{ data?: T, success
     let item;
 
     try {
-        const valueString = await AsyncStorage.getItem(key)
-        item = JSON.parse(valueString as string)
+        const valueString = await AsyncStorage.getItem(key) as string;
+        item = JSON.parse(valueString)
 
         if (item !== null) return { data: item as T, success: true }
 
@@ -16,11 +16,9 @@ const get = async <T>(key: string, defaultData?: T): Promise<{ data?: T, success
     }
 
     return { success: false, data: defaultData }
-
-
 }
 
-const set = async (key: string, value: any): Promise<boolean> => {
+const set = async<T> (key: string, value: T): Promise<boolean> => {
 
     let saved: boolean = false;
 

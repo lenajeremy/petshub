@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../redux/store';
 import { likeOrUnlikePets } from '../utils/helpers';
 
 function PetCard(props: Pets) {
-  
   const likedPets = useAppSelector(store => store.likedPets);
   const dispatch = useAppDispatch();
 
@@ -17,8 +16,8 @@ function PetCard(props: Pets) {
         <Text style={styles.title}>{props.name}</Text>
       </View>
 
-      <Pressable onPress={() => likeOrUnlikePets(dispatch, props.name)}>
-        {likedPets.includes(props.name) ? (
+      <Pressable onPress={() => likeOrUnlikePets(dispatch, props)}>
+        {likedPets.findIndex(pet => pet.name === props.name) !== -1 ? (
           <HeartFilled fill="#DE0202" />
         ) : (
           <HeartOutlined />

@@ -10,6 +10,7 @@ import localStore from '../utils/asyncstorage';
 // AsyncStorage.clear()
 
 function HomeScreen() {
+
   // to keep track of all the pets gotten even after scrolling;
   const [pets, setPets] = React.useState<Pets[]>([]);
   const [page, setPage] = React.useState(0);
@@ -23,11 +24,11 @@ function HomeScreen() {
 
   const getLikedPetsFromLocalStoreAndUpdateReduxStore = async () => {
 
-    const { data } = await localStore.get<string[]>(localStore.FAV_PET_KEY, []);
+    const { data } = await localStore.get<Pets[]>(localStore.FAV_PET_KEY, []);
 
     console.log(data)
 
-    dispatch(updateLikedPets(data as string[]))
+    dispatch(updateLikedPets(data as Pets[]))
   }
 
   // fetch pets when the page changes

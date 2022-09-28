@@ -1,21 +1,20 @@
 import { createSlice, PayloadAction, configureStore, Store } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import petsApi from "../api/petsApi";
+import petsApi, { Pets } from "../api/petsApi";
 
-
-const initialState: string[] = []
+const initialState: Pets[] = []
 
 const likedPets = createSlice({
     name: 'likedPets',
     initialState,
     reducers: {
-        likePet(state, action: PayloadAction<string>) {
+        likePet(state, action: PayloadAction<Pets>) {
             state.push(action.payload)
             return state;
         },
 
-        dislikePet(state, action: PayloadAction<string>) {
-            const index = state.findIndex((pet => action.payload === pet));
+        dislikePet(state, action: PayloadAction<Pets>) {
+            const index = state.findIndex((pet => pet.name === action.payload.name));
 
             console.log(index)
             state.splice(index, 1);
@@ -23,7 +22,7 @@ const likedPets = createSlice({
             return state
         },
 
-        updateLikedPets(state, action: PayloadAction<string[]>) {
+        updateLikedPets(state, action: PayloadAction<Pets[]>) {
             state = action.payload;
 
             return state;
